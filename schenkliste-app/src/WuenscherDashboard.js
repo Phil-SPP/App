@@ -56,6 +56,22 @@ const WuenscherDashboard = () => {
     }
   };
 
+  const deleteWishlist = async (wishlistId) => {
+    try {
+      const updatedWishlists = wishlists.filter((wishlist) => wishlist.id !== wishlistId);
+      setWishlists(updatedWishlists);
+
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      await updateDoc(userRef, {
+        wishlists: updatedWishlists,
+      });
+
+      console.log(`Wunschliste mit ID ${wishlistId} gelöscht.`);
+    } catch (error) {
+      console.error("Fehler beim Löschen der Wunschliste:", error);
+    }
+  };
+
   const addArticleToWishlist = async (wishlistId) => {
     if (!newArticle.name || !newArticle.link) {
       console.error("Artikelname und Link sind erforderlich.");
@@ -108,16 +124,26 @@ const WuenscherDashboard = () => {
           {wishlists.map((wishlist) => (
             <div
               key={wishlist.id}
-              className="p-4 border border-gray-300 rounded-lg cursor-pointer shadow-md hover:bg-gray-50 transition"
+              className="relative p-4 border border-gray-300 rounded-lg cursor-pointer shadow-md hover:bg-gray-50 transition"
               onClick={() => selectWishlist(wishlist.id)}
             >
+              {/* Button zum Löschen */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteWishlist(wishlist.id);
+                }}
+                className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-700"
+              >
+                &times;
+              </button>
               <h3 className="text-lg font-bold">{wishlist.name}</h3>
               <p>Erstellt am: {new Date(wishlist.createdAt).toLocaleDateString()}</p>
 
               {/* Button zum Hinzufügen eines Artikels */}
               <button
                 onClick={(e) => {
-                  e.stopPropagation(); // Verhindert das Öffnen der Wunschliste beim Klick auf den Button
+                  e.stopPropagation();
                   toggleAddArticle(wishlist.id);
                 }}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"

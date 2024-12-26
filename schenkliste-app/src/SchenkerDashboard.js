@@ -1,4 +1,6 @@
 import React from "react";
+import "./style.css"; // Stile für das Schenker-Dashboard
+
 
 const SchenkerDashboard = () => {
   return (

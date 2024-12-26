@@ -12,6 +12,9 @@ const WuenscherDashboard = () => {
   }); // Neuer Artikel
   const [selectedWishlist, setSelectedWishlist] = useState(null); // Ausgewählte Wunschliste
 
+  // Für jede Wunschliste ein Zustand, ob die Artikel-Eingabefelder sichtbar sind
+  const [isAddArticleVisible, setIsAddArticleVisible] = useState({});
+
   // Wunschlisten aus Firestore laden
   const fetchWishlists = async () => {
     try {
@@ -48,17 +51,13 @@ const WuenscherDashboard = () => {
 
     try {
       const userRef = doc(db, "users", auth.currentUser.uid);
-
-      // Wunschliste zu Firestore hinzufügen
       await updateDoc(userRef, {
-        wishlists: arrayUnion(newWishlist),
+        wishlists: arrayUnion(newWishlist), // Wunschliste zu Firestore hinzufügen
       });
 
-      // Lokale Wunschlisten aktualisieren, um die neue Wunschliste sofort anzuzeigen
+      // Lokale Wunschlisten aktualisieren
       setWishlists((prevWishlists) => [...prevWishlists, newWishlist]);
-
-      // Eingabefeld zurücksetzen
-      setNewWishlistName("");
+      setNewWishlistName(""); // Eingabefeld nach dem Speichern zurücksetzen
     } catch (error) {
       console.error("Fehler beim Erstellen der Wunschliste:", error);
     }
@@ -92,6 +91,7 @@ const WuenscherDashboard = () => {
     });
 
     setNewArticle({ name: "", link: "", preview: "" }); // Eingabefelder zurücksetzen
+    setIsAddArticleVisible((prev) => ({ ...prev, [wishlistId]: false })); // Eingabefelder wieder schließen
   };
 
   // Auswahl der Wunschliste für die Anzeige der Artikel
@@ -104,6 +104,14 @@ const WuenscherDashboard = () => {
   useEffect(() => {
     fetchWishlists();
   }, []);
+
+  // Funktion zum Umschalten der Sichtbarkeit der Artikel hinzufügen-Eingabefelder
+  const toggleAddArticle = (wishlistId) => {
+    setIsAddArticleVisible((prevState) => ({
+      ...prevState,
+      [wishlistId]: !prevState[wishlistId],
+    }));
+  };
 
   return (
     <div>
@@ -119,6 +127,50 @@ const WuenscherDashboard = () => {
           >
             <h3 className="text-lg font-bold">{wishlist.name}</h3>
             <p>Erstellt am: {new Date(wishlist.createdAt).toLocaleDateString()}</p>
+            
+            {/* Button zum Hinzufügen eines Artikels */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation(); // Verhindert das Öffnen der Wunschliste beim Klicken auf den Button
+                toggleAddArticle(wishlist.id);
+              }}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
+            >
+              Artikel hinzufügen
+            </button>
+
+            {/* Formular zum Hinzufügen eines Artikels, falls sichtbar */}
+            {isAddArticleVisible[wishlist.id] && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  placeholder="Artikelname"
+                  value={newArticle.name}
+                  onChange={(e) => setNewArticle({ ...newArticle, name: e.target.value })}
+                  className="p-2 border rounded-lg mr-4 mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Artikellink"
+                  value={newArticle.link}
+                  onChange={(e) => setNewArticle({ ...newArticle, link: e.target.value })}
+                  className="p-2 border rounded-lg mr-4 mb-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Vorschau-URL"
+                  value={newArticle.preview}
+                  onChange={(e) => setNewArticle({ ...newArticle, preview: e.target.value })}
+                  className="p-2 border rounded-lg mr-4 mb-2"
+                />
+                <button
+                  onClick={() => addArticleToWishlist(wishlist.id)}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg"
+                >
+                  Artikel hinzufügen
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -157,38 +209,6 @@ const WuenscherDashboard = () => {
           className="bg-blue-500 text-white px-4 py-2 rounded-lg"
         >
           Wunschliste erstellen
-        </button>
-      </div>
-
-      {/* Formular zum Hinzufügen eines Artikels */}
-      <div className="mb-6">
-        <h3 className="text-xl font-bold mb-4">Neuen Artikel hinzufügen</h3>
-        <input
-          type="text"
-          placeholder="Artikelname"
-          value={newArticle.name}
-          onChange={(e) => setNewArticle({ ...newArticle, name: e.target.value })}
-          className="p-2 border rounded-lg mb-2"
-        />
-        <input
-          type="text"
-          placeholder="Artikellink"
-          value={newArticle.link}
-          onChange={(e) => setNewArticle({ ...newArticle, link: e.target.value })}
-          className="p-2 border rounded-lg mb-2"
-        />
-        <input
-          type="text"
-          placeholder="Vorschau-URL"
-          value={newArticle.preview}
-          onChange={(e) => setNewArticle({ ...newArticle, preview: e.target.value })}
-          className="p-2 border rounded-lg mb-2"
-        />
-        <button
-          onClick={() => addArticleToWishlist(selectedWishlist?.id)}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg"
-        >
-          Artikel hinzufügen
         </button>
       </div>
     </div>

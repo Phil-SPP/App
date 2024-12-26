@@ -102,15 +102,6 @@ const WuenscherDashboard = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header and Role Switcher */}
-      <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Schenkliste App</h1>
-        <div>
-          <button className="bg-gray-700 px-4 py-2 rounded mr-2">Wünscher</button>
-          <button className="bg-gray-700 px-4 py-2 rounded">Schenker</button>
-        </div>
-      </header>
-
       <div className="flex-1 p-6">
         {/* Wunschlisten-Kacheln */}
         <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

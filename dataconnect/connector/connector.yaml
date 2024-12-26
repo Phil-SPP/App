@@ -1,0 +1,6 @@
+connectorId: default
+generate:
+  javascriptSdk:
+    outputDir: ../../schenkliste-app/dataconnect-generated/js/default-connector
+    package: "@firebasegen/default-connector"
+    packageJsonDir: ../../schenkliste-app

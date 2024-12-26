@@ -117,120 +117,118 @@ const WuenscherDashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-1 p-6">
+    <div className="container mt-4">
+      <div className="row">
+        {/* Formular zum Erstellen einer neuen Wunschliste */}
+        <div className="col-12 mb-4">
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Name der Wunschliste"
+              value={newWishlistName}
+              onChange={(e) => setNewWishlistName(e.target.value)}
+            />
+            <button className="btn btn-primary" onClick={createWishlist}>
+              Wunschliste erstellen
+            </button>
+          </div>
+        </div>
+
         {/* Wunschlisten-Kacheln */}
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {wishlists.map((wishlist) => (
+        {wishlists.map((wishlist) => (
+          <div key={wishlist.id} className="col-lg-4 col-md-6 mb-4">
             <div
-              key={wishlist.id}
-              className="relative p-4 border border-gray-300 rounded-lg cursor-pointer shadow-md hover:bg-gray-50 transition"
+              className="card shadow-sm"
               onClick={() => selectWishlist(wishlist.id)}
             >
-              {/* Button zum Löschen */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteWishlist(wishlist.id);
-                }}
-                className="absolute top-2 right-2 bg-red-500 text-white w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-700"
-              >
-                &times;
-              </button>
-              <h3 className="text-lg font-bold">{wishlist.name}</h3>
-              <p>Erstellt am: {new Date(wishlist.createdAt).toLocaleDateString()}</p>
+              <div className="card-body position-relative">
+                {/* Wunschliste löschen */}
+                <button
+                  className="btn-close position-absolute top-0 end-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteWishlist(wishlist.id);
+                  }}
+                ></button>
+                <h5 className="card-title">{wishlist.name}</h5>
+                <p className="card-text">
+                  Erstellt am: {new Date(wishlist.createdAt).toLocaleDateString()}
+                </p>
 
-              {/* Button zum Hinzufügen eines Artikels */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleAddArticle(wishlist.id);
-                }}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg"
-              >
-                Artikel hinzufügen
-              </button>
+                {/* Button zum Hinzufügen eines Artikels */}
+                <button
+                  className="btn btn-outline-secondary btn-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleAddArticle(wishlist.id);
+                  }}
+                >
+                  Artikel hinzufügen
+                </button>
 
-              {/* Artikel hinzufügen Formular */}
-              {isAddArticleVisible[wishlist.id] && (
-                <div className="mt-4">
-                  <input
-                    type="text"
-                    placeholder="Artikelname"
-                    value={newArticle.name}
-                    onChange={(e) => setNewArticle({ ...newArticle, name: e.target.value })}
-                    className="p-2 border rounded-lg mr-4 mb-2"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Artikellink"
-                    value={newArticle.link}
-                    onChange={(e) => setNewArticle({ ...newArticle, link: e.target.value })}
-                    className="p-2 border rounded-lg mr-4 mb-2"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Vorschau-URL"
-                    value={newArticle.preview}
-                    onChange={(e) => setNewArticle({ ...newArticle, preview: e.target.value })}
-                    className="p-2 border rounded-lg mr-4 mb-2"
-                  />
-                  <button
-                    onClick={() => addArticleToWishlist(wishlist.id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded-lg"
-                  >
-                    Artikel hinzufügen
-                  </button>
-                </div>
-              )}
+                {/* Artikel hinzufügen Formular */}
+                {isAddArticleVisible[wishlist.id] && (
+                  <div className="mt-3">
+                    <input
+                      type="text"
+                      className="form-control mb-2"
+                      placeholder="Artikelname"
+                      value={newArticle.name}
+                      onChange={(e) => setNewArticle({ ...newArticle, name: e.target.value })}
+                    />
+                    <input
+                      type="text"
+                      className="form-control mb-2"
+                      placeholder="Artikellink"
+                      value={newArticle.link}
+                      onChange={(e) => setNewArticle({ ...newArticle, link: e.target.value })}
+                    />
+                    <input
+                      type="text"
+                      className="form-control mb-2"
+                      placeholder="Vorschau-URL"
+                      value={newArticle.preview}
+                      onChange={(e) => setNewArticle({ ...newArticle, preview: e.target.value })}
+                    />
+                    <button
+                      className="btn btn-success w-100"
+                      onClick={() => addArticleToWishlist(wishlist.id)}
+                    >
+                      Artikel hinzufügen
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
 
         {/* Anzeige der Artikel der ausgewählten Wunschliste */}
         {selectedWishlist && (
-          <div className="mb-6">
-            <h3 className="text-xl font-bold mb-4">Artikel in {selectedWishlist.name}</h3>
-            <ul>
+          <div className="col-12 mt-4">
+            <h3 className="h5">Artikel in {selectedWishlist.name}</h3>
+            <ul className="list-group">
               {selectedWishlist.articles.length > 0 ? (
                 selectedWishlist.articles.map((article, index) => (
-                  <li key={index}>
-                    <a href={article.link} target="_blank" rel="noopener noreferrer">
+                  <li key={index} className="list-group-item">
+                    <a
+                      href={article.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-decoration-none"
+                    >
                       {article.name}
                     </a>
                   </li>
                 ))
               ) : (
-                <p>Keine Artikel gefunden.</p>
+                <li className="list-group-item">Keine Artikel gefunden.</li>
               )}
             </ul>
           </div>
         )}
-
-        {/* Formular zum Erstellen einer neuen Wunschliste */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Name der Wunschliste"
-            value={newWishlistName}
-            onChange={(e) => setNewWishlistName(e.target.value)}
-            className="p-2 border rounded-lg mr-4"
-          />
-          <button
-            onClick={createWishlist}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          >
-            Wunschliste erstellen
-          </button>
-        </div>
       </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white p-4 mt-4">
-        <div className="text-center">
-          <p>&copy; 2024 Schenkliste App. Alle Rechte vorbehalten.</p>
-        </div>
-      </footer>
     </div>
   );
 };

@@ -1,0 +1,176 @@
+/* Global Container Settings */
+.app-container {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .light-mode {
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  .dark-mode {
+    background-color: #1e1e2f;
+    color: #f9f9f9;
+  }
+  
+  .full-height {
+    min-height: 100vh;
+  }
+  
+  /* Flex Utilities */
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .flex-grow-1 {
+    flex-grow: 1;
+  }
+  
+  /* Header Styling */
+  .header {
+    background-color: var(--primary-dark, #4a4a6a);
+    color: var(--text-light, #ffffff);
+    padding: 0.5rem 1rem; /* Reduzierte Polsterung */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-title {
+    font-size: 1.25rem; /* Kleinere Schriftgröße */
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .btn-logout {
+    background-color: var(--danger, #e63946);
+    color: var(--text-light, #ffffff);
+    border: none;
+    padding: 0.4rem 0.8rem; /* Kompaktere Buttons */
+    border-radius: 4px;
+    font-size: 0.875rem; /* Kleinere Schrift */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-logout:hover {
+    background-color: var(--danger-hover, #d62839);
+  }
+  
+  /* Auth Container */
+  .auth-container {
+    background-color: var(--card-bg, #ffffff);
+    padding: 1.5rem; /* Weniger Polsterung */
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px; /* Schmalere Container */
+    animation: fadeIn 0.4s ease-in-out;
+  }
+  
+  /* Main Content */
+  .main-content {
+    padding: 0.5rem 1rem; /* Reduzierte Abstände */
+    flex-grow: 1;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: var(--primary-dark, #4a4a6a);
+    color: var(--text-light, #ffffff);
+    text-align: center;
+    padding: 0.5rem; /* Weniger Polsterung */
+    font-size: 0.875rem; /* Kleinere Schrift */
+  }
+  
+  /* Bottom Navigation */
+  .bottom-navigation {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.5rem 0; /* Kompakte Navigation */
+  }
+  
+  .bottom-navigation button {
+    background-color: transparent;
+    color: var(--text-light, #ffffff);
+    border: none;
+    text-align: center;
+    font-size: 0.8rem; /* Kleinere Schrift */
+    cursor: pointer;
+    padding: 0.4rem; /* Reduzierte Polsterung */
+    transition: color 0.3s ease;
+  }
+  
+  .bottom-navigation button:hover {
+    color: var(--primary-hover, #d0d0e1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .header-title {
+      font-size: 1rem; /* Kleinere Schrift auf mobilen Geräten */
+    }
+  
+    .auth-container {
+      padding: 1rem;
+      max-width: 90%;
+    }
+  
+    .footer {
+      font-size: 0.75rem; /* Kleinere Schrift im Footer */
+    }
+  
+    .bottom-navigation button {
+      font-size: 0.75rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .auth-container {
+      padding: 0.8rem;
+    }
+  
+    .header-title {
+      font-size: 0.9rem;
+    }
+  
+    .btn-logout {
+      padding: 0.3rem 0.6rem;
+    }
+  
+    .footer {
+      font-size: 0.7rem;
+    }
+  }
+  
+  /* Variables for Theme */
+  :root {
+    --primary-dark: #4a4a6a;
+    --primary-hover: #6a6a9a;
+    --danger: #e63946;
+    --danger-hover: #d62839;
+    --card-bg: #ffffff;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --bg-light: #f9f9f9;
+    --bg-dark: #1e1e2f;
+  }
+  .dashboard-card h5 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .dashboard-card p {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+  
+  

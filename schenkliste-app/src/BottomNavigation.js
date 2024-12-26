@@ -1,31 +1,30 @@
 import React from "react";
-import "./style.css"; // Falls spezifische Stile für die BottomNavigation vorhanden sind
+import "./style.css";
 
-const BottomNavigation = ({ toggleDarkMode }) => {
+const BottomNavigation = ({ toggleDarkMode, onNavigate }) => {
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 shadow-md">
-      <div className="flex justify-around items-center py-3">
-        {/* Start Button */}
-        <button className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg transition duration-200">
-          <span className="text-xl">🏠</span>
-          <span className="text-sm">Start</span>
-        </button>
-
-        {/* Wunschlisten Button */}
-        <button className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg transition duration-200">
-          <span className="text-xl">📜</span>
-          <span className="text-sm">Wunschlisten</span>
-        </button>
-
-        {/* Dark Mode Button */}
-        <button
-          className="flex flex-col items-center p-2 hover:bg-gray-100 rounded-lg transition duration-200"
-          onClick={toggleDarkMode}
-        >
-          <span className="text-xl">🌙</span>
-          <span className="text-sm">Dark Mode</span>
-        </button>
-      </div>
+    <div className="bg-gray-800 text-white py-4 flex justify-around">
+      <button
+        onClick={() => onNavigate("start")}
+        className="flex flex-col items-center"
+      >
+        <span>🏠</span>
+        <span className="text-sm">Start</span>
+      </button>
+      <button
+        onClick={() => onNavigate("wuenscherDashboard")}
+        className="flex flex-col items-center"
+      >
+        <span>📜</span>
+        <span className="text-sm">Wunschlisten</span>
+      </button>
+      <button
+        onClick={toggleDarkMode}
+        className="flex flex-col items-center"
+      >
+        <span>🌙</span>
+        <span className="text-sm">Dark Mode</span>
+      </button>
     </div>
   );
 };

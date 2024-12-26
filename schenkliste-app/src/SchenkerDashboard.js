@@ -7,7 +7,6 @@ const SchenkerDashboard = () => {
   const [expandedUser, setExpandedUser] = useState(null); // Ausgeklappter Nutzer
   const [expandedWishlist, setExpandedWishlist] = useState(null); // Ausgeklappte Wunschliste
 
-  // Alle Nutzer aus Firestore laden
   const fetchUsers = async () => {
     try {
       const usersCollection = collection(db, "users");
@@ -23,79 +22,86 @@ const SchenkerDashboard = () => {
   };
 
   useEffect(() => {
-    fetchUsers(); // Nutzer beim ersten Laden abrufen
+    fetchUsers();
   }, []);
 
-  // Akkordeon für Nutzer toggeln
   const toggleUserAccordion = (userId) => {
     setExpandedUser((prev) => (prev === userId ? null : userId));
-    setExpandedWishlist(null); // Zurücksetzen der ausgeklappten Wunschliste
+    setExpandedWishlist(null);
   };
 
-  // Akkordeon für Wunschlisten toggeln
   const toggleWishlistAccordion = (wishlistId) => {
     setExpandedWishlist((prev) => (prev === wishlistId ? null : wishlistId));
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Schenker Dashboard</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="container mt-4">
+      <h2 className="text-center mb-4">Schenker Dashboard</h2>
+      <div className="row justify-content-center">
         {users.map((user) => (
-          <div key={user.id} className="p-4 border rounded-lg shadow-md">
-            <div
-              className="cursor-pointer flex items-center"
-              onClick={() => toggleUserAccordion(user.id)}
-            >
-              <img
-                src={user.avatar || "https://via.placeholder.com/100"}
-                alt="Avatar"
-                className="w-16 h-16 rounded-full mr-4"
-              />
-              <h4 className="font-bold">{user.email}</h4>
-            </div>
-            {/* Wunschlisten Akkordeon */}
-            {expandedUser === user.id && (
-              <div className="mt-4">
-                {user.wishlists && user.wishlists.length > 0 ? (
-                  user.wishlists.map((wishlist) => (
-                    <div key={wishlist.id} className="mb-4">
-                      <div
-                        className="p-2 border rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200"
-                        onClick={() => toggleWishlistAccordion(wishlist.id)}
-                      >
-                        <h5 className="font-bold">{wishlist.name}</h5>
-                      </div>
-                      {/* Artikel Akkordeon */}
-                      {expandedWishlist === wishlist.id && (
-                        <div className="mt-2 ml-4">
-                          {wishlist.articles && wishlist.articles.length > 0 ? (
-                            <ul className="list-disc list-inside">
-                              {wishlist.articles.map((article, index) => (
-                                <li key={index}>
-                                  <a
-                                    href={article.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500"
-                                  >
-                                    {article.name}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p>Keine Artikel gefunden.</p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p>Keine Wunschlisten gefunden.</p>
-                )}
+          <div key={user.id} className="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div className="card shadow border-0">
+              <div
+                className="card-body text-center cursor-pointer"
+                onClick={() => toggleUserAccordion(user.id)}
+              >
+                <img
+                  src={user.avatar || "https://via.placeholder.com/100"}
+                  alt="Avatar"
+                  className="rounded-circle mb-3 shadow-sm"
+                  width="80"
+                  height="80"
+                />
+                <h5 className="mb-0">{user.email}</h5>
               </div>
-            )}
+
+              {expandedUser === user.id && (
+                <div className="card-body">
+                  <h6 className="text-muted text-center mb-3">Wunschlisten:</h6>
+                  {user.wishlists && user.wishlists.length > 0 ? (
+                    user.wishlists.map((wishlist) => (
+                      <div key={wishlist.id} className="mb-3">
+                        <button
+                          className="btn btn-outline-primary w-100 text-start"
+                          onClick={() => toggleWishlistAccordion(wishlist.id)}
+                        >
+                          {wishlist.name}
+                        </button>
+                        {expandedWishlist === wishlist.id && (
+                          <div className="mt-2">
+                            {wishlist.articles && wishlist.articles.length > 0 ? (
+                              <ul className="list-group">
+                                {wishlist.articles.map((article, index) => (
+                                  <li
+                                    key={index}
+                                    className="list-group-item d-flex justify-content-between align-items-center"
+                                  >
+                                    <a
+                                      href={article.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-decoration-none text-primary"
+                                    >
+                                      {article.name}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="text-muted text-center mt-2">
+                                Keine Artikel gefunden.
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-muted text-center">Keine Wunschlisten gefunden.</p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
